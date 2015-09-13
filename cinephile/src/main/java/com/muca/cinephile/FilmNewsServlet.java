@@ -28,6 +28,8 @@ public class FilmNewsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+
 		response.getWriter().print(FilmNewsList.getInstance().toString());
 		response.getWriter().flush();
 	}
