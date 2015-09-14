@@ -32,11 +32,11 @@ public class FilmNewsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("utf-8");
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		JsonArray filmLists = new JsonArray();		
 		filmLists.add(OnCinemas.getInstance());
 		filmLists.add(ComingSoon.getInstance());
-
 		response.getWriter().print(filmLists.toString());
 		response.getWriter().flush();
 	}

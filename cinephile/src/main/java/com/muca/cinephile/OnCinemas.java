@@ -14,8 +14,9 @@ public class OnCinemas {
 
 	static void add(Film film) {
 
+		String json = new Gson().toJson(film);
 		getInstance().add(
-				new Gson().fromJson(new Gson().toJson(film),
+				new Gson().fromJson(json,
 						JsonObject.class));
 	}
 

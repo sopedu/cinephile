@@ -34,7 +34,7 @@ public class RssFetcher {
 			Film film = new Film(entry.getTitle(), entry.getLink(),
 					description, image);
 			OnCinemas.add(film);
-			System.out.println(film.toString());
+			
 		}
 	}
 
@@ -55,18 +55,17 @@ public class RssFetcher {
 			Film film = new Film(entry.getTitle(), entry.getLink(),
 					description, image);
 			ComingSoon.add(film);
-			System.out.println(film.toString());
 		}
 	}
 
-	public static void main(String[] args) {
-
-		try {
-			new RssFetcher().fetchOnCinemas();
-			System.out.println("-----------------------------------------------");
-			new RssFetcher().fetchComingSoon();
-		} catch (IllegalArgumentException | FeedException | IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//
+//		try {
+//			new RssFetcher().fetchOnCinemas();
+//			System.out.println("-----------------------------------------------");
+//			new RssFetcher().fetchComingSoon();
+//		} catch (IllegalArgumentException | FeedException | IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
