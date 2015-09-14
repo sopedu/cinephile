@@ -3,18 +3,17 @@ package com.muca.cinephile;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class FilmNews {
+public class Film {
 
 	private String title;
 	private String link;
-	private String publishedDate;
+	private String description;
 	private String image;
 
-	public FilmNews(String title, String link, String publishedDate,
-			String image) {
+	public Film(String title, String link, String description, String image) {
 		this.title = title;
 		this.link = link;
-		this.publishedDate = publishedDate;
+		this.description = description;
 		this.image = image;
 	}
 
@@ -34,12 +33,12 @@ public class FilmNews {
 		this.image = image;
 	}
 
-	public String getPublishedDate() {
-		return publishedDate;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPublishedDate(String publishedDate) {
-		this.publishedDate = publishedDate;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getLink() {
@@ -50,5 +49,10 @@ public class FilmNews {
 		this.link = link;
 	}
 
+	@Override	
+	public String toString() {
+		return "Film [title=" + title + ", link=" + link + ", description="
+				+ description + ", image=" + image + "]";
+	}
 
 }

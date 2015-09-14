@@ -34,7 +34,9 @@ public class Starter implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent sce) {
 		try {
-			new RssFetcher().fetch();
+			RssFetcher rssFetcher = new RssFetcher();
+			rssFetcher.fetchComingSoon();
+			rssFetcher.fetchOnCinemas();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

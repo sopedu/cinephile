@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 
+import com.google.gson.JsonArray;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -15,14 +16,11 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 public class RssFetcher {
-	
-    
 
-	void fetch() throws IllegalArgumentException, FeedException,
+	void fetchOnCinemas() throws IllegalArgumentException, FeedException,
 			IOException {
-		URL url = new URL("http://www.fandango.com/rss/newmovies.rss");
+		URL url = new URL("http://rss.beyazperde.com/filmler/bunlar");
 		HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-		// Reading the feed
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed feed = input.build(new XmlReader(httpcon));
 		List entries = feed.getEntries();
@@ -30,18 +28,43 @@ public class RssFetcher {
 
 		while (itEntries.hasNext()) {
 			SyndEntry entry = (SyndEntry) itEntries.next();
-			String value = entry.getDescription().getValue();
-			String image=Jsoup.parse(value).select("p>a>img").first()
-					.attr("src");
-			FilmNews filmNews = new FilmNews(entry.getTitle(), entry.getLink(), entry.getPublishedDate().toString(), image);
-			FilmNewsList.add(filmNews);
+			String description = Jsoup.parse(entry.getDescription().getValue())
+					.select("p").first().text();
+			String image = entry.getEnclosures().get(0).getUrl();
+			Film film = new Film(entry.getTitle(), entry.getLink(),
+					description, image);
+			OnCinemas.add(film);
+			System.out.println(film.toString());
+		}
+	}
+
+	void fetchComingSoon() throws IllegalArgumentException, FeedException,
+			IOException {
+		URL url = new URL("http://rss.beyazperde.com/filmler/pekyakinda");
+		HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+		SyndFeedInput input = new SyndFeedInput();
+		SyndFeed feed = input.build(new XmlReader(httpcon));
+		List entries = feed.getEntries();
+		Iterator itEntries = entries.iterator();
+
+		while (itEntries.hasNext()) {
+			SyndEntry entry = (SyndEntry) itEntries.next();
+			String description = Jsoup.parse(entry.getDescription().getValue())
+					.select("p").first().text();
+			String image = entry.getEnclosures().get(0).getUrl();
+			Film film = new Film(entry.getTitle(), entry.getLink(),
+					description, image);
+			ComingSoon.add(film);
+			System.out.println(film.toString());
 		}
 	}
 
 	public static void main(String[] args) {
 
 		try {
-			new RssFetcher().fetch();
+			new RssFetcher().fetchOnCinemas();
+			System.out.println("-----------------------------------------------");
+			new RssFetcher().fetchComingSoon();
 		} catch (IllegalArgumentException | FeedException | IOException e) {
 			e.printStackTrace();
 		}
