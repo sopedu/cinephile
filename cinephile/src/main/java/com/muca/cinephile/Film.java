@@ -3,19 +3,27 @@ package com.muca.cinephile;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class Film {
+public abstract class Film {
 
 	private String title;
-	private String link;
+	
 	private String description;
 	private String image;
+	private String actors;
+	private String genre;																																																																																																																																																													
+	private String director;																																																																																																																																																													
 
-	public Film(String title, String link, String description, String image) {
+	public Film(String title, String description, String image,
+			String actors, String genre, String director) {
 		this.title = title;
-		this.link = link;
 		this.description = description;
 		this.image = image;
+		this.actors = actors;
+		this.genre = genre;
+		this.director = director;
 	}
+	
+	public abstract void register();
 
 	public String getTitle() {
 		return title;
@@ -41,18 +49,42 @@ public class Film {
 		this.description = description;
 	}
 
-	public String getLink() {
-		return link;
-	}
+	
 
-	public void setLink(String link) {
-		this.link = link;
-	}
 
-	@Override	
+
+
+
+	@Override
 	public String toString() {
-		return "Film [title=" + title + ", link=" + link + ", description="
-				+ description + ", image=" + image + "]";
+		return "Film [title=" + title + ", description=" + description
+				+ ", image=" + image + ", actors=" + actors + ", genre="
+				+ genre + ", director=" + director + "]";
 	}
+
+	public String getActors() {
+		return actors;
+	}
+
+	public void setActors(String actors) {
+		this.actors = actors;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	public String getDirector() {
+		return director;
+	}
+
+	public void setDirector(String director) {
+		this.director = director;
+	}
+
 
 }
