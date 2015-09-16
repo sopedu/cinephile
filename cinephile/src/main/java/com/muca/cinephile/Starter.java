@@ -6,9 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.bson.Document;
 
 import com.google.gson.JsonArray;
@@ -21,38 +18,41 @@ import com.muca.cinephile.extractor.MynetExtractor;
 import com.muca.cinephile.film.ComingSoon;
 import com.muca.cinephile.film.OnCinemas;
 import com.rometools.rome.io.FeedException;
-public class Starter  {
+
+public class Starter {
+	MongoClient mongoClient = new MongoClient("52.26.3.224", 27017);
 
 	/**
 	 * Default constructor.
 	 */
 	public Starter() {
-		// TODO Auto-generated constructor stub
 	}
 
-
 	public void start() {
-
-		MongoClient mongoClient = new MongoClient("52.26.3.224", 27017);
-		MongoDatabase database = mongoClient.getDatabase("cinephile");
-		MongoCollection<Document> onCinemasCollection = database
-				.getCollection("OnCinemas");
-		MongoCollection<Document> comingSoonCollection = database
-				.getCollection("ComingSoon");
 		try {
-			MynetExtractor me = new MynetExtractor();
-			me.fillComingSoon("http://sinema.mynet.com/rss/RSS-gelecekprogram/rss.xml");
-			me.fillOnCinemas("http://sinema.mynet.com/rss/RSS-vizyon/rss.xml");
-
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (FeedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			fillFilmLists();
+			MongoDatabase database = mongoClient.getDatabase("cinephile");
+			MongoCollection<Document> onCinemasCollection = database
+					.getCollection("OnCinemas");
+			MongoCollection<Document> comingSoonCollection = database
+					.getCollection("ComingSoon");
+			onCinemasCollection.deleteMany(new Document());
+			comingSoonCollection.deleteMany(new Document());
+			insertJsonArrayIntoMongo(onCinemasCollection,
+					OnCinemas.getInstance());
+			insertJsonArrayIntoMongo(comingSoonCollection,
+					ComingSoon.getInstance());
+		} catch (IllegalArgumentException | IOException | FeedException e) {
 			e.printStackTrace();
 		}
-		insertJsonArrayIntoMongo(onCinemasCollection, OnCinemas.getInstance());
-		insertJsonArrayIntoMongo(comingSoonCollection, ComingSoon.getInstance());
+
+	}
+
+	public void fillFilmLists() throws IOException, IllegalArgumentException,
+			FeedException {
+		MynetExtractor me = new MynetExtractor();
+		me.fillComingSoon("http://sinema.mynet.com/rss/RSS-gelecekprogram/rss.xml");
+		me.fillOnCinemas("http://sinema.mynet.com/rss/RSS-vizyon/rss.xml");
 	}
 
 	public void insertJsonArrayIntoMongo(MongoCollection<Document> collection,
@@ -76,7 +76,6 @@ public class Starter  {
 				new Starter().start();
 			}
 		}, 0, 1, TimeUnit.DAYS);
-
 
 	}
 
